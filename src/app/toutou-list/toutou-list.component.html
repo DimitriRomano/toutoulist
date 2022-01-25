@@ -1,10 +1,15 @@
 <div class="container">
     <input type="text" [(ngModel)]="inputData"> <button (click)="add()">Ajouter</button>
-    <div *ngIf="toutous.length > 0" class="col-6">
-        <div *ngFor="let toutou of toutous; let index = index" class="tasks">
-            <div class="task">
-                <app-toutou-task [textTask]="toutou.textTask" ></app-toutou-task>
-                <button class="col-12" (click)="delete(index)">Supprimer</button>
+    <div class="toutou">
+        <div *ngIf="toutous.length > 0" class="tasks">
+            <div *ngFor="let toutou of toutous; let index = index" class="task">
+                    <app-toutou-task [textTask]="toutou.textTask" (updateActivity)="updateToutouList($event)"></app-toutou-task>
+                    <button class="col-12" (click)="delete(index)">Supprimer</button>
+            </div>
+        </div>
+        <div *ngIf="toutousActives.length > 0" class="activeList">
+            <div *ngFor="let task of toutousActives" class="activeTask">
+                {{task}}
             </div>
         </div>
     </div>

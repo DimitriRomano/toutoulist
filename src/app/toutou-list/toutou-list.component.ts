@@ -1,3 +1,4 @@
+import { ToutouTaskComponent } from "../toutou-task/toutou-task.component";
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -11,7 +12,7 @@ export class ToutouListComponent implements OnInit {
     textTask:string;
     isDone:boolean;
   }[] = [];
-
+  toutousActives:string[]=[];
 
   constructor() {
    }
@@ -25,6 +26,17 @@ export class ToutouListComponent implements OnInit {
 
   delete(index:number){
     this.toutous.splice(index,1)
+  }
+
+  updateToutouList({isDone, textTask}:any):void {
+    if(isDone){
+      this.toutousActives.push(textTask);
+    }else{
+      let i = this.toutousActives.indexOf(textTask);
+      this.toutousActives.splice(i,1);
+    }
+    
+    
   }
 
   
