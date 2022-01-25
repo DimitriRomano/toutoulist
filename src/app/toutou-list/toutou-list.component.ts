@@ -35,8 +35,6 @@ export class ToutouListComponent implements OnInit {
       let i = this.toutousActives.indexOf(textTask);
       this.toutousActives.splice(i,1);
     }
-    
-    
   }
 
   
