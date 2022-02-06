@@ -1,5 +1,10 @@
-    <p>{{textTask}}</p>
-    <input (click)="changeIsDone()" class="form-check-input" type="checkbox" value="" id="flexCheckState">
-    <label class="form-check-label" for="flexCheckState">
+    <p class="col-12" [hidden]="onUpdate">{{textTask}}</p>
+    <input class="col-12" type="text" [hidden]="!onUpdate" [(ngModel)]="textTask">
+    <input (click)="changeState()" class="form-check-input col-6" type="checkbox" value="" id="flexCheckState">
+    <label class="form-check-label col-6" for="flexCheckState">
     {{stateText}}
     </label>
+    <button class="col-6" (click)="delete()">Supprimer</button>
+    <button class="col-6" [hidden]="onUpdate" (click)="update()">update</button> 
+    <button class="col-6" [hidden]="!onUpdate" (click)="update()">save</button> 
+

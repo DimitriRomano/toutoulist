@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ITask } from '../task.model';
+import { ToutouService } from '../toutou.service';
 
 @Component({
   selector: 'app-toutou-task',
@@ -6,26 +8,34 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./toutou-task.component.scss']
 })
 export class ToutouTaskComponent implements OnInit {
-  @Input() isDone=false;
-  stateText='Pending';
-  @Input() textTask='';
-  @Output() updateActivity = new EventEmitter<{isDone: boolean, textTask:string}>();
+  @Input() idTask!:string;
+  @Input() textTask!:string;
+  @Input() isDone!:boolean;
+  @Input() stateText='Pending';
+  @Input() onUpdate = false;
 
-  constructor() { }
+  constructor(private ToutouService: ToutouService) { }
 
   ngOnInit(): void {
   }
 
-  
+  getInformationTask() : ITask{
+    return {idTask:this.idTask, textTask : this.textTask, isDone:this.isDone,stateText: this.stateText}
+  }
 
-  public changeIsDone() {
-    this.isDone=!this.isDone;
-    if(this.isDone){
-      this.stateText='Done'
-    }else{
-      this.stateText='Pending'
+  delete(){
+    this.ToutouService.deleteTask(this.getInformationTask());
+  }
+
+  changeState(){
+    this.ToutouService.updateState(this.getInformationTask());
+  }
+
+  update(){
+    this.onUpdate=!this.onUpdate;
+    if(!this.onUpdate){
+      this.ToutouService.updateTextTag(this.idTask,this.textTask)
     }
-    this.updateActivity.emit({isDone : this.isDone, textTask: this.textTask});
   }
 
 }

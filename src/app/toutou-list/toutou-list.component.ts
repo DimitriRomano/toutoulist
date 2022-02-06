@@ -1,41 +1,39 @@
 import { ToutouTaskComponent } from "../toutou-task/toutou-task.component";
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ToutouService } from "../toutou.service";
+import { ITask } from "../task.model";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-toutou-list',
   templateUrl: './toutou-list.component.html',
   styleUrls: ['./toutou-list.component.scss']
 })
-export class ToutouListComponent implements OnInit {
+export class ToutouListComponent implements OnDestroy{
   inputData = '';
-  toutous:{
-    textTask:string;
-    isDone:boolean;
-  }[] = [];
-  toutousActives:string[]=[];
+  toutous!: ITask[];
+  toutouSubscription!: Subscription;
 
-  constructor() {
+  constructor(private toutouService: ToutouService) {
+    this.toutouService.tasks$.subscribe(
+      (tasks)=>{
+        this.toutous=tasks;
+      }
+    );
    }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+      if(this.toutouSubscription){
+        this.toutouSubscription.unsubscribe();
+      }
   }
 
   add() {
-    this.toutous.push({textTask:this.inputData,isDone:false});
+    const id = new Date().getTime().toString() 
+    + (Math.floor(Math.random() * Math.floor(new Date().getTime()))).toString();
+    this.toutouService.addTask({idTask:id , textTask:this.inputData,isDone:false,stateText:"Pending"});
   }
-
-  delete(index:number){
-    this.toutous.splice(index,1)
-  }
-
-  updateToutouList({isDone, textTask}:any):void {
-    if(isDone){
-      this.toutousActives.push(textTask);
-    }else{
-      let i = this.toutousActives.indexOf(textTask);
-      this.toutousActives.splice(i,1);
-    }
-  }
+  
 
   
 
